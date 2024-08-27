@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos.css">
+        <link rel="stylesheet" href="../animate.css">
+        <title>Cuestionario</title>
+        <style>
+            body {
+                background-color:#fbff0e;
+                font-family: "Bitter", serif;
+                line-height: 1;
+            }
+
+            .body__Page .main__title{
+                display: flex;
+                justify-content: center;
+                padding-top: 1rem;
+                padding-bottom: 2rem;
+                font-weight: bold;
+                font-size: 1.2rem;
+                font-family: 'Poppins';
+                color: #74815d;
+            }
+
+            .body{
+                text-align: center;
+                color: black;
+            }
+
+            .body form{
+                margin: auto;
+                border: 1px solid transparent;
+                border-radius: 25px;
+                max-width: fit-content;
+                padding: 7rem;
+                background-color: #e6e92a ;
+                opacity: 0.8;
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+            }
+
+
+            .body .question{
+                padding-bottom: 0.5rem;
+                padding-top: 0.5rem;
+
+            }
+
+            .body .question h2{
+                padding-bottom: 0.9rem;
+                font-size: 1.7rem;
+            }
+
+            .question span{
+                border-radius: 25px;
+                border: 1px solid transparent;
+                padding-left: 1.2rem;
+                padding-right: 1.2rem;
+                margin: 1em;
+                font-size: 1.2rem;
+                background-color: #5e5f10;
+                color: whitesmoke;
+            }
+
+            .question input:hover{
+                cursor: pointer;
+            }
+
+            .body .question .hidden{
+                display: none;
+            }
+
+            .body button{
+                margin-top: 1.2rem;
+                margin-bottom: 1.2rem;
+                border: 1px solid transparent;
+                background-color: #3bc9db;
+                color: black;
+                border-radius: 2rem;
+                padding: 1rem;
+                font-size: 1em;
+                font-family: 'Poppins';
+                font-weight: bold;
+            }
+
+            .body__Page button:hover{
+                cursor: pointer;
+                animation: bounce; /* referring directly to the animation's @keyframe declaration */
+                animation-duration: 2s; /* don't forget to set a duration! */
+            }
+
+            .body__Page .reload{
+                background-color: #8BCB37;
+                font-family: Run Child;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+            }
+
+
+            .cover .container__cover p{
+                font-size: 42px;
+                color: #8BCB37;
+                margin: 0 25px;
+                font-family: Run Child;
+            }
+
+            .imgCustom {
+                width: 700px;
+                height: 350px;
+                object-fit: contain;;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container_all" id="container__all">
+            <div class="cover">
+                <!--INICIO WAVE-->
+                    <div class="bg_color"></div>
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                <!--FINAL WAVE-->
+                <div class="container__cover">
+                    <p>Cuestionario<br/><br/><a href="../index.html"> Juegos </a><a href="../encuentra-diferencia/encuentra-diferencia.html">&nbsp;&nbsp;></a></p>
+                    <div class="container__vector">
+                        <img class="imgCustom" src="../img/cuestionario.jpg">
+                    </div>
+                </div>
+            </div>
+
+            <div class="body__Page">
+                <span class="main__title"><b>¡Prueba lo que has aprendido!</b></span>
+
+                <div class="main__title" id="results"></div>
+                <div class="body">
+                    <form name="quiz" onsubmit="return onSubmit()" style="align-items: center;">
+                        <div class="question">
+                            <h2>¿Cuál es la definición de microorganismo?</h2>
+                            <input type="radio" name="q1" value="a">&nbsp;&nbsp;a. Un animal pequeño que puede causar enfermedad<br/><br/>
+                            <input type="radio" name="q1" value="b">&nbsp;&nbsp;b. Organismo pequeño que solo se puede visualizar a través de un microscopio<br/><br/>
+                            <input type="radio" name="q1" value="c">&nbsp;&nbsp;c. Un organismo que se puede observar a simple vista<br/><br/>
+                            <span id="qs1" class="hidden">b. Organismo pequeño que solo se puede visualizar a través de un microscopio</span>
+                        </div>
+                        <br/>
+
+                        <div class="question">
+                            <h2>¿Cuántos tipos de microorganismos hay?</h2>
+                            <input type="radio" name="q2" value="a">&nbsp;&nbsp;a. 1 (Parásitos)<br/><br/>
+                            <input type="radio" name="q2" value="b">&nbsp;&nbsp;b. 3 (Levadura, Virus, Protozoos)<br/><br/>
+                            <input type="radio" name="q2" value="c">&nbsp;&nbsp;c. 4 (Bacterias, Hongos, Protozoos y Virus)<br/><br/>
+                            <span id="qs2" class="hidden">c. 4 (Bacterias, Hongos, Protozoos y Virus)</span>
+                        </div>
+                        <br/><br/>
+
+                        <div class="question">
+                            <h2>Todos los microorganismos enferman a la gente</h2>
+                            <input type="radio" name="q3" value="a">&nbsp;&nbsp;a. Falso, existen microorganismos que conviven con nosotros y no causan enfermedad<br/><br/>
+                            <input type="radio" name="q3" value="b">&nbsp;&nbsp;b. Verdadero, todos los microorganismos son dañinos para la gente<br/><br/>
+                            <span id="qs3" class="hidden">a. Falso, existen microorganismos que conviven con nosotros y no causan enfermedad</span>
+                        </div>
+                        <br/><br/>
+
+                        <div class="question">
+                            <h2>¿Con qué instrumento podemos ver los microorganismos?</h2>
+                            <input type="radio" name="q4" value="a">&nbsp;&nbsp;a. Con microscopio y lupa<br/><br/>
+                            <input type="radio" name="q4" value="b">&nbsp;&nbsp;b. Solo con microscopio<br/><br/>
+                            <input type="radio" name="q4" value="c">&nbsp;&nbsp;c. Con gafas de aumento<br/><br/>
+                            <span id="qs4" class="hidden">b. Solo con microscopio</span>
+                        </div>
+                        <br/><br/>
+
+                        <div class="question">
+                            <h2>Existen bacterias que no enferman a los niños y que son necesarios para el correcto funcionamiento del organismo</h2>
+                            <input type="radio" name="q5" value="a">&nbsp;&nbsp;a. Verdadero, existen bacterias que son importantes para la digestión y otras funciones<br/><br/>
+                            <input type="radio" name="q5" value="b">&nbsp;&nbsp;b. Falso, las bacterias siempre causan daño<br/><br/>
+                            <span id="qs5" class="hidden">a. Verdadero, existen bacterias que son importantes para la digestión y otras funciones</span>
+                        </div>
+                        <br/><br/>
+                        <button type="submit" class="animate__animated animate__bounce">Enviar respuestas</button>
+                    </form>
+                </div>
+
+                <div class="main__title" id="noQuestion"></div>
+
+                <button class="animate__animated animate__bounce reload" onclick="reiniciar()">Reiniciar</button>
+            </div>
+
+            <Footer>
+                <div class="container__footer">
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/uniquindio.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/huellas-ambientales-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/GEPAMOL.png" alt="">
+                        </div>
+                        <!-- <div class="terms">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum reiciendis et quasi aut facere vitae vero. Inventore, minus ab voluptate modi repellat, pariatur tempora quisquam, debitis facilis explicabo voluptatem. A.
+                        </div> -->
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/laboratorio2-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/minciencias.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box__copyright">
+                    <hr>
+                    <p>Todos los derechos reservados © 2022. Desarrollado por <span><b>IGNIWEB</b></span></p>
+                </div>
+            </Footer>
+        </div>
+
+
+
+        <script src="../jquery-3-5-1.js"></script>
+        <script>
+            function onSubmit(){
+                var score=0;
+                var numOfQuestions=5;
+                var ansArr=['b','c','a','b','a'];
+
+                var q1=document.forms['quiz']['q1'].value;
+                var q2=document.forms['quiz']['q2'].value;
+                var q3=document.forms['quiz']['q3'].value;
+                var q4=document.forms['quiz']['q4'].value;
+                var q5=document.forms['quiz']['q5'].value;
+
+                for(var i=1; i<=numOfQuestions; i++){
+                    if(eval('q'+ i) == ''){
+                        alert("No respondiste la pregunta " + i)
+                        $('.hidden').removeClass("hidden");
+                    }
+                }
+
+                for(var i=1; i<=numOfQuestions; i++){
+                    if(eval('q'+ i) == ansArr[i-1]){
+                        score++;
+                    }
+                }
+
+                var results = document.getElementById('results')
+                results.innerHTML="<h2>Obtuviste "+ score + " puntos de " + numOfQuestions + "</h2>"
+                // alert('You scored ' + score + ' out of ' + numOfQuestions)
+                $('.hidden').removeClass("hidden");
+                return false;
+            }
+
+            function reiniciar(){
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>

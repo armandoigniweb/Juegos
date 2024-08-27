@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos.css">
+        <link rel="stylesheet" href="../animate.css">
+        <title>Encuentra las diferencias</title>
+        <style>
+            @font-face{
+                font-family: "Run Child";
+                src: url(../run-child/run-child.ttf);
+            }
+
+            body {
+                background-color: #e9fac8;
+                font-family: "Bitter", serif;
+                line-height: 1;
+            }
+
+            .body__Page span{
+                display: flex;
+                justify-content: center;
+                padding-bottom: 1rem;
+                font-weight: bold;
+                font-size: 1.2em;
+                font-family: 'Poppins';
+                color: #74815d;
+            }
+
+            .title {
+                color: rgb(55, 55, 55);
+                text-align: center;
+                font-family: "Run Child";
+                color: black;
+            }
+
+            .centered{
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+            }
+
+
+            .diffie {
+                width: 80%;
+                display: flex;
+                flex-direction: row;
+                margin: auto;
+            }
+
+            .diffie > div {
+                border: solid 2px transparent;
+                border-radius: 25px;
+                width: 50%;
+                position: relative;
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+
+            .diffie .first {
+                border-right: none;
+            }
+
+            .diffie .first .diff {
+                background-color: green;
+                position: absolute;
+                opacity: 0.7;
+                transition: opacity 200ms ease;
+                height: 50px;
+                width: 50px;
+                border-radius: 100%;
+                display: block !important;
+                transform: translate(-50%, -50%);
+                z-index: 100;
+            }
+
+            .diffie .first .diff.wrong {
+                background-color: red;
+                z-index: 50;
+            }
+
+            .diffie .first .diff.hide {
+                opacity: 0;
+            }
+
+            .game-over {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 60px 20px;
+                width: 100%;
+                max-width: 400px;
+                background: rgba(179, 229, 220, 0.95);
+                border-radius: 15px;
+                text-align: center;
+            }
+
+            .game-over p {
+                font-size: 32px;
+                font-weight: bold;
+            }
+
+            .game-over button:hover {
+                background: #7ad2c2;
+            }
+
+
+            @media (max-width: 640px) {
+                .game-over {
+                    padding: 30px;
+                }
+                .game-over p {
+                    margin-top: 0;
+                }
+            }
+
+            .cover .container__cover p{
+                font-size: 42px;
+                color: #8BCB37;
+                margin: 0 25px;
+                font-family: "Run Child";
+            }
+
+            .body__Page button:hover{
+                cursor: pointer;
+                animation: bounce; /* referring directly to the animation's @keyframe declaration */
+                animation-duration: 2s; /* don't forget to set a duration! */
+            }
+
+            .body__Page .reload{
+                background-color: #8BCB37;
+                font-family: Run Child;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container_all" id="container__all">
+            <div class="cover">
+                <!--INICIO WAVE-->
+                    <div class="bg_color"></div>
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                <!--FINAL WAVE-->
+                <div class="container__cover">
+                    <p>Encuentra las diferencias<br/><br/><a href="../cuestionario/cuestionario.html">&lt;&nbsp;&nbsp;</a><a href="../index.html"> Juegos </a><a href="../hangman/hangman.html">&nbsp;&nbsp;></a></p>
+                    <div class="container__vector">
+                        <iframe class="iframe" src="../video/DIFERENCIA.mp4" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body__Page">
+                <span><b>Hay 5 diferencias, selecciona cada una en la imagen izquierda</b></span>
+                <div class="centrado">
+                    <div class="centered">
+                        <div class="diffie" style="height: 505.595px;">
+                            <div class="first">
+                                <div id="diff-0" class="diff hide" style="left: 9.5%; top: 33%;"></div>
+                                <div id="diff-1" class="diff hide" style="left: 2.54902%; top: 75.3537%;"></div>
+                                <div id="diff-2" class="diff hide" style="left: 51.3725%; top: 46.023%;"></div>
+                                <div id="diff-3" class="diff hide" style="left: 42.3529%; top: 92.086%;"></div>
+                                <div id="diff-4" class="diff hide" style="left: 80%; top: 88.5427%;"></div>
+                                <div class="second"></div>
+                            </div>
+                        </div>
+                        <div id="canvas"></div>
+                    </div>
+                </div>
+                <button class="animate__animated animate__bounce reload" onclick="reiniciar()">Reiniciar</button>
+
+            </div>
+
+            <Footer>
+                <div class="container__footer">
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/uniquindio.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/huellas-ambientales-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/GEPAMOL.png" alt="">
+                        </div>
+                        <!-- <div class="terms">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum reiciendis et quasi aut facere vitae vero. Inventore, minus ab voluptate modi repellat, pariatur tempora quisquam, debitis facilis explicabo voluptatem. A.
+                        </div> -->
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/laboratorio2-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/minciencias.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box__copyright">
+                    <hr>
+                    <p>Todos los derechos reservados © 2022. Desarrollado por <span><b>IGNIWEB</b></span></p>
+                </div>
+            </Footer>
+        </div>
+        <script src="../jquery-3-5-1.js"></script>
+        <script>
+            function Diffie(element, first, second, diffs){
+            this.element = element;
+            this.first = first;
+            this.second = second;
+            this.diffs = diffs;
+            this.remaining = diffs.length;
+            this.onFinish = function(){alert('El juego ha finalizado')};
+            this.w = $(this.element).width();
+            this.h = this.w / 2;
+
+            $(this.element).html("").height(this.h);
+
+            $(window).resize({o: this}, function(e){
+                $(e.data.o.element).height($(e.data.o.element).width() / 2)
+            });
+
+            $('<div></div>').addClass('first').css({"background-image": "url("+this.first+")"}).appendTo($(this.element));
+
+            $('<div></div>').addClass('second').css({"background-image": "url("+this.second+")"}).appendTo($(this.element));
+
+            this.diffs.forEach(function(element, index, array){
+                $('<div></div>').attr('id', 'diff-'+index).addClass('diff').addClass('hide').css({
+                    left: element.x+"%",
+                    top: element.y+"%"
+                }).appendTo($(this.element).find('.first'))
+            }, this);
+
+            $(this.element).find('.diff.hide').click({o: this}, function(e){
+                e.stopPropagation()
+                $(this).removeClass('hide')
+                e.data.o.remaining--
+
+                if (e.data.o.remaining == 0){
+                e.data.o.onFinish();
+                }
+            });
+
+            $(this.element).find('.first').click({o: this}, function(e){
+                var container = {
+                    left: $(this).offset().left,
+                    top: $(this).offset().top,
+                    w: $(this).width(),
+                    h: $(this).height()
+                }
+
+                var div = {
+                    left: (e.pageX - container.left) * 100 / container.w,
+                    top: (e.pageY - container.top) * 100 / container.h
+                }
+
+                $('<div></div>').addClass('diff').addClass('wrong').css({
+                    left: div.left+'%',
+                    top: div.top+'%'
+                }).appendTo(this)});
+            }
+
+            var mistakes = [
+                {x:9.5,y:33},
+                {x:2.54902,y:75.3537},
+                {x:51.3725,y:46.023},
+                {x:42.3529,y:92.086},
+                {x:80,y:88.5427}
+            ];
+
+            var diffie = new Diffie('.diffie', '../img/diferencias-izquierda-portada.jpg','../img/diferencias-derecha-portada.jpg', mistakes);
+
+            diffie.onFinish = function(){
+                $('#canvas').append('<div class="game-over"><p class="game-over-won">¡El juego ha finalizado!</p></div>'),
+                setTimeout(function(){
+                    window.location.reload()
+                    randomize()
+                },1500)};
+
+            function reiniciar(){
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>

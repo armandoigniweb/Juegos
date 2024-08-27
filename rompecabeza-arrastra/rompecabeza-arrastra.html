@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../fonts-google.css" rel="stylesheet" type="text/css"/>
+        <title>Rompecabezas Arrastrando</title>
+        <style>
+            :root {
+                --color:lightgray;
+                --border-radius:10px;
+                --image:url('https://media.gettyimages.com/vectors/cute-cartoon-dachshunds-in-love-vector-id865392634?s=2048x2048');
+            }
+
+            body {
+                background:#00CCFF;
+                font-family: "Bitter", serif;
+            }
+
+            .title {
+                color: #FFF;
+                text-align: center;
+            }
+
+            .centered{
+                display: flex;
+                justify-content: center;
+                margin-top: 4rem;
+            }
+
+            #puz, #puzz {
+                position:absolute;
+                top:50%;
+                left:50%;
+                transform:translate(-110%,-50%);
+                width:300px;
+                height:300px;
+                border-radius:var(--border-radius);
+                border:3px dashed lightgray;
+                user-select:none;
+                overflow:hidden;
+            }
+
+            #puzz {
+                width:325px;
+                height:325px;
+                transform:translate(15%,-50%);
+                border:0;
+            }
+
+            #puz i {
+                float:left;
+                width:100px;
+                height:100px;
+                outline:1px dashed lightgray;
+            }
+
+            #puzz i {
+                float:left;
+                width:100px;
+                height:100px;
+                background:var(--color);
+                background-image:var(--image);
+                background-size:300px 300px;
+                cursor:move;
+                margin:4px;
+            }
+
+            .first {
+                border-top-left-radius:var(--border-radius);
+                background-position:left top !important;
+            }
+
+            .secon {
+                background-position:center top !important;
+            }
+
+            .third {
+                border-top-right-radius:var(--border-radius);
+                background-position:right top !important;
+            }
+
+            .fourt {
+                background-position:left center !important;
+            }
+
+            .fifth {
+                background-position:center center !important;
+            }
+
+            .sixth {
+                background-position:right center !important;
+            }
+
+            .seven {
+                border-bottom-left-radius:var(--border-radius);
+                background-position:left bottom !important;
+            }
+
+            .eight {
+                background-position:center bottom !important;
+            }
+
+            .ninth {
+                border-bottom-right-radius:var(--border-radius);
+                background-position:right bottom !important;
+            }
+
+            .dropped {
+                background:var(--color);
+                background-image:var(--image);
+                background-size:300px 300px;
+            }
+
+            .done {
+                opacity:0;
+                pointer-events:none;
+            }
+
+            .allDone {
+                animation:allDone 1s linear forwards;
+                border:3px solid lightgray !important;
+            }
+
+            .allDone i {
+                outline:0 !important;
+            }
+
+            @keyframes allDone {
+                50% { transform:translate(-110%,-50%) scale(1.2); }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- <div class="title">
+            <h1>Rompecabezas Arrastrando</h1>
+            <p>Diviértete armando la imagen de nuestros personajes, el objetivo es arrastrar cada una de las partes donde se encuentra la imagen de fondo en su correcto orden.</p>
+        </div> -->
+
+        <div class="centered">
+            <div id="puz">
+                <i class="first" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="secon" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="third" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="fourt" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="fifth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="sixth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="seven" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="eight" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+                <i class="ninth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+            </div>
+            <div id="puzz">
+                <i class="eight" draggable="true" ondragstart="drag(event)"></i><i class="third" draggable="true" ondragstart="drag(event)"></i><i class="sixth" draggable="true" ondragstart="drag(event)"></i><i class="secon" draggable="true" ondragstart="drag(event)"></i><i class="ninth" draggable="true" ondragstart="drag(event)"></i><i class="seven" draggable="true" ondragstart="drag(event)"></i><i class="fourt" draggable="true" ondragstart="drag(event)"></i><i class="first" draggable="true" ondragstart="drag(event)"></i><i class="fifth" draggable="true" ondragstart="drag(event)"></i>
+            </div>
+        </div>
+
+        <script src="../jquery-3-5-1.js"></script>
+        <script>
+            /* IMAGEN PARA USAR EN EL ROMPECABEZAS */
+            var img = ['../img/arrastre-portada.jpg']
+            var old = 0
+            function randomize() {
+            let root = document.documentElement
+            root.style.setProperty('--image','url('+img[old]+')')
+            /*old++
+            if(old > 6) {
+                old = 0
+            }*/
+            old = 0
+            var ul = document.querySelector('#puzz');
+            for (var i = ul.children.length; i >= 0; i--) {
+                ul.appendChild(ul.children[Math.random() * i | 0]);
+            }
+            }
+            randomize()
+
+            function allowDrop(ev) {
+            ev.preventDefault();
+            }
+
+            function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.className);
+            }
+
+            function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text")
+
+            if(ev.target.className == data){
+                ev.target.classList.add('dropped')
+                document.querySelector('.'+data+"[draggable='true']").classList.add('done')
+
+                if(document.querySelectorAll('.dropped').length == 9) {
+                document.querySelector('#puz').classList.add('allDone')
+                document.querySelector('#puz').style.border = 'none'
+                document.querySelector('#puz').style.animation = 'allDone 1s linear forwards'
+
+                setTimeout(function(){
+                    window.location.reload()
+                    randomize()
+                },1500)
+                }
+            }
+            }
+
+            function reload() {
+            document.body.innerHTML = "<div id='puz'>  <i class='first' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='secon' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='third' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='fourt' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='fifth' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='sixth' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='seven' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='eight' ondrop='drop(event)' ondragover='allowDrop(event)'></i>  <i class='ninth' ondrop='drop(event)' ondragover='allowDrop(event)'></i></div><div id='puzz'>  <i class='third' draggable='true' ondragstart='drag(event)'></i>  <i class='first' draggable='true' ondragstart='drag(event)'></i>  <i class='secon' draggable='true' ondragstart='drag(event)'></i>  <i class='fourt' draggable='true' ondragstart='drag(event)'></i>  <i class='fifth' draggable='true' ondragstart='drag(event)'></i>  <i class='sixth' draggable='true' ondragstart='drag(event)'></i>  <i class='seven' draggable='true' ondragstart='drag(event)'></i>  <i class='eight' draggable='true' ondragstart='drag(event)'></i>  <i class='ninth' draggable='true' ondragstart='drag(event)'></i>  </div>";
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos.css">
+        <link href="../animate.css" rel="stylesheet" type="text/css">
+        <title>Hangman</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            @font-face{
+                font-family: Run Child;
+                src: url(../run-child/run-child.ttf);
+            }
+
+            .hangman-letters div, .hangman-results .game-over, .hangman-results .game-over button {
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            }
+
+            body {
+                background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20viewBox=%220%200%2016%2016%22%3E%3Cg%20fill=%22#84c6ad%22%3E%3Cpolygon%20points=%2212%200%200%2012%200%2016%2016%200%22/%3E%3Cpolygon%20points=%2212%2016%2016%2016%2016%2012%22/%3E%3Cpolygon%20points=%220%204%200%208%208%200%204%200%22/%3E%3Cpolygon%20points=%2216%208%2016%204%204%2016%208%2016%22/%3E%3C/g%3E%3C/svg%3E");
+                background-color:#ffdeeb;
+                font-family: "Bitter", serif;
+                line-height: 1;
+            }
+
+            .title {
+                color: rgb(22, 22, 22);
+                text-align: center;
+                font-family: Run Child;
+            }
+
+            .hangman {
+                max-width: 700px;
+                width: 90%;
+                margin-right: auto;
+                margin-left: auto;
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .hangman span{
+                color: #441142;
+                font-weight: bold;
+                font-size: 1.2em;
+                font-family: 'Poppins';
+            }
+
+            .hangman-letters {
+                text-align: center;
+                margin: 30px auto;
+            }
+
+            .hangman-letters div {
+                background: white;
+                display: inline-block;
+                padding: 8px 16px 10px;
+                margin: 3px;
+                font-weight: bold;
+                font-size: 26px;
+                cursor: pointer;
+                position: relative;
+                transition: 0.2s;
+                border-radius: 3px;
+            }
+
+            .hangman-letters div:hover {
+                background: #ddd;
+            }
+            .hangman-letters .disabled {
+                color: #888;
+                background: #ccc;
+                cursor: default;
+                pointer-events: none;
+            }
+
+            .hangman-letters .disabled:before {
+                content: "\002716";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-weight: normal;
+                font-size: 32px;
+                color: #dd37ec;
+            }
+
+            .hangman-letters .disabled.correct {
+                background: #b3e5dc;
+            }
+
+            .hangman-letters .disabled.correct:before {
+                color: #298772;
+                content: "\002714";
+            }
+
+            @media (max-width: 640px) {
+                .hangman-letters div {
+                    padding: 6px 12px 8px;
+                    font-size: 18px;
+                }
+                .hangman-letters .disabled:before {
+                    font-size: 26px;
+                }
+            }
+
+            .hangman-puzzle {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hangman-puzzle-letters {
+                display: inline-block;
+                padding: 8px 16px 10px;
+                margin: 4px;
+                border-bottom: 2px solid black;
+                height: 50px;
+                text-align: center;
+                font-weight: bold;
+                font-size: 30px;
+                width: 30px;
+                flex: 1 auto;
+                padding-bottom: 3px;
+            }
+
+            .hangman-puzzle-letters.space {
+                border: 0;
+            }
+
+            .hangman-puzzle-letters.game-lost {
+                color: #db79e4;
+            }
+
+            @media (max-width: 640px) {
+                .hangman-puzzle-letters {
+                    font-size: 24px;
+                    width: 20px;
+                    height: 36px;
+                    padding: 6px 0 8px;
+                }
+            }
+
+            .hangman-results {
+                text-align: center;
+                position: relative;
+            }
+
+            .hangman-results .game-over {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 60px 20px;
+                width: 100%;
+                max-width: 400px;
+                background: rgba(179, 229, 220, 0.95);
+            }
+
+            .hangman-results .game-over p {
+                font-size: 32px;
+                font-weight: bold;
+            }
+
+            .hangman-results .game-over button {
+                background: #41bea8;
+                color: white;
+                padding: 20px 30px;
+                font-size: 32px;
+                font-family: "Bitter", serif;
+                border: 0;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .hangman-results .game-over button:hover {
+                background: #7ad2c2;
+            }
+
+            @media (max-width: 640px) {
+                .hangman-results .game-over {
+                    padding: 30px;
+                }
+                .hangman-results .game-over p {
+                    margin-top: 0;
+                }
+                .hangman-results .game-over button {
+                    padding: 10px 20px;
+                    font-size: 26px;
+                }
+            }
+
+            .hangman-hangman {
+                max-width: 400px;
+                margin: 0 auto;
+
+            }
+            @media (max-width: 640px) {
+                .hangman-hangman {
+                    padding: 0 50px;
+                }
+            }
+
+            .hangman-svg {
+                width: 100%;
+                height: auto;
+            }
+
+            @media (max-width: 640px) {
+                .hangman {
+                    width: 95%;
+                }
+            }
+
+            .cover .container__cover p{
+                font-size: 42px;
+                color: #8BCB37;
+                margin: 0 25px;
+                font-family: Run Child;
+            }
+
+            .body__Page button:hover{
+                cursor: pointer;
+                animation: bounce; /* referring directly to the animation's @keyframe declaration */
+                animation-duration: 2s; /* don't forget to set a duration! */
+            }
+
+            .body__Page .reload{
+                background-color: #8BCB37;
+                font-family: Run Child;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container_all" id="container__all">
+            <div class="cover">
+                <!--INICIO WAVE-->
+                    <div class="bg_color"></div>
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                <!--FINAL WAVE-->
+                <div class="container__cover">
+                    <p>Hangman<br/><br/><a href="../encuentra-diferencia/encuentra-diferencia.html">&lt;&nbsp;&nbsp;</a><a href="../index.html"> Juegos </a><a href="../juego-memoria/juego-memoria.html">&nbsp;&nbsp;></a></p>
+                    <div class="container__vector">
+                        <iframe class="iframe" src="../video/HANGMAN-MICROORGANISMOS.mp4" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body__Page">
+                <div class="hangman">
+                    <span><b>Pista:</b> "Grupos de microorganismos"</span>
+                    <div class="hangman-results">
+                        <div class="hangman-hangman">
+                            <svg id="hangman-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 400 500" stroke="#000000" fill="none">
+                                <polyline stroke-width="10" stroke-miterlimit="10" points="253.996,142.899 253.996,59.666 115.663,59.666 115.663,434.999 "/>
+                                <line stroke-width="10" stroke-miterlimit="10" x1="392.33" y1="434.999" x2="8.33" y2="434.999"/>
+                                <g id="added-parts">
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="game-over" style="display: none; border-radius: 15px;">
+                            <p class="game-over-won">¡Ganaste! :)</p><br/>
+                            <p class="game-over-lost">Has perdido :(</p><br/>
+                            <button id="game-over-replay">Iniciar de nuevo</button>
+                        </div>
+                    </div>
+                    <div class="hangman-puzzle">
+                    </div>
+                    <div class="hangman-letters">
+                    </div>
+                </div>
+                <button class="animate__animated animate__bounce reload" onclick="reiniciar()">Reiniciar</button>
+
+            </div>
+
+            <Footer>
+                <div class="container__footer">
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/uniquindio.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/huellas-ambientales-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/GEPAMOL.png" alt="">
+                        </div>
+                        <!-- <div class="terms">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum reiciendis et quasi aut facere vitae vero. Inventore, minus ab voluptate modi repellat, pariatur tempora quisquam, debitis facilis explicabo voluptatem. A.
+                        </div> -->
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/laboratorio2-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/minciencias.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box__copyright">
+                    <hr>
+                    <p>Todos los derechos reservados © 2022. Desarrollado por <span><b>IGNIWEB</b></span></p>
+                </div>
+            </Footer>
+        </div>
+        <script src="../jquery-3-5-1.js"></script>
+        <script>
+            var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''),
+                puzzle = '',
+                puzzleLetterContainers = [],
+                previouslyChosen = '',
+                totalIncorrect = 0,
+                remainingBlanks = 0,
+                /* FRASE PARA EL JUEGO EN MINUSCULA */
+                puzzleList = [
+                    " bacterias virus hongos protozoos parasitos"/*"alphabet", "kitten", "blasphemy", "telephone", "sinkhole", "hammer", "technical", "banana", "elementary", "laptop", "excellent", "famous", "cheese", "actress", "landlord", "interest", "lipstick", "cardboard", "hungry", "inventory", "windblown", "attempt", "liquid", "tranquil", "effect", "digital", "strawberry", "clinic", "alchemy", "figure", "virtual", "melee", "gravity", "sugar", "piglet", "orange", "traumatized", "magnificent", "fallout", "elevator"*/
+                ],
+                hangmanParts = [
+                    '<circle stroke-width="10" stroke-miterlimit="10" cx="254.404" cy="174.26" r="29.412"/>',
+                    '<line stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="203.672" x2="254.404" y2="314.056"/>',
+                    '<line stroke-width="10" stroke-miterlimit="10" x1="255.339" y1="311.094" x2="185.875" y2="406.468"/>',
+                    '<line stroke-width="10" stroke-miterlimit="10" x1="323.46" y1="406.468" x2="253.996" y2="311.094"/>',
+                    '<line stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="229.409" x2="164.11" y2="256.834"/>',
+                    '<line stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="229.409" x2="344.699" y2="256.834"/>',
+                    '<circle fill="#000000" cx="243.663" cy="169.333" r="3.667"/>',
+                    '<circle fill="#000000" cx="265.663" cy="169.333" r="3.667"/>',
+                    '<path stroke-width="4" stroke-miterlimit="10" d="M245.571,190.082c0-4.879,3.955-8.833,8.833-8.833 c4.879,0,8.833,3.955,8.833,8.833"/>'
+                ];
+
+            //add alphabet to div
+            alphabet.forEach((i) => {
+                    $('.hangman-letters').append(`<div>${i}</div>`);
+                });
+
+            //set up initial puzzle
+            setUp();
+
+            //set up new puzzle when user clicks "start over"
+            $('#game-over-replay').click(function(){
+                //setUp();
+                location.reload();
+            });
+
+            //use the function that checks letters, then disable that letter and check if gameover
+            $('.hangman-letters div').click(function(){
+                var isCorrect = letterChosen(this.innerHTML);
+                if(isCorrect) $(this).addClass('disabled correct');
+                else $(this).addClass('disabled');
+                if(remainingBlanks < 1) {
+                    gameOver(true);
+                }
+                if(totalIncorrect >= hangmanParts.length + 1) {
+                    gameOver(false);
+                }
+            });
+
+            //functions
+
+            //wipe variables and containers and set up new game
+            function setUp(){
+                $('.game-over').hide();
+                puzzle = newPuzzle();
+                puzzleLetterContainers = [];
+                previouslyChosen = '';
+                totalIncorrect = 0;
+                remainingBlanks = puzzle.length;
+                $('.hangman-puzzle').html('');
+                $('#added-parts').html('');
+                $('.hangman-letters div').each(function(){
+                    this.classList = '';
+                })
+
+                puzzle.split('').forEach((i) => {
+                    var thisClass = "hangman-puzzle-letters";
+                    if(i == ' ') {
+                        thisClass += ' space';
+                        remainingBlanks--;
+                    }
+                    $('.hangman-puzzle').append(`<div class="${thisClass}">&nbsp;</div>`);
+                });
+                puzzleLetterContainers = document.getElementsByClassName('hangman-puzzle-letters');
+            }
+
+            //check if the letter is correct, then add it to the board
+            function letterChosen(letter) {
+                if(previouslyChosen.indexOf(letter) < 0) {
+                    previouslyChosen+=letter;
+                    var checkResults = checkLetter(puzzle, letter);
+                    if(checkResults) {
+                        checkResults.forEach(function(item) {
+                            puzzleLetterContainers[item].innerHTML = letter;
+                            remainingBlanks--;
+                        });
+                        return true;
+                    }
+                    else {
+                        wrongAnswer(letter);
+                        return false;
+                    }
+                }
+            }
+
+            //check submitted letter against puzzle and return false or every index of letter
+            function checkLetter(solution, thisLetter) {
+                var indexes = [];
+                solution.split('').forEach(function(item, index){
+                    if(item == thisLetter) {
+                        indexes.push(index);
+                    }
+                });
+                return indexes.length > 0 ? indexes : false;
+            }
+
+            //when answer is wrong, add to the hangman
+            function wrongAnswer(letter) {
+                document.getElementById('added-parts').appendChild(parseSVG(hangmanParts[totalIncorrect]));
+                totalIncorrect++;
+            }
+
+            //grab new puzzle from array
+            function newPuzzle() {
+                var newPuzzle = puzzleList.splice(Math.floor(Math.random()*puzzleList.length), 1);
+                return newPuzzle[0];
+            }
+
+            //svg parser from stackoverflow so I can just append new shapes to existing svg
+            function parseSVG(s) {
+                var div= document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+                div.innerHTML= '<svg xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+                var frag= document.createDocumentFragment();
+                while (div.firstChild.firstChild)
+                    frag.appendChild(div.firstChild.firstChild);
+                return frag;
+            }
+
+            //take true/false for win/lose and pop up the dialog/replay
+            function gameOver(won) {
+                if(!won) {
+                    $('.game-over-lost').show();
+                    $('.game-over-won').hide();
+                    $('.hangman-puzzle-letters').each(function(index) {
+                        console.log($(this).html());
+                        if($(this).html() == "&nbsp;" && !$(this).hasClass("space")) {
+                            $(this).html(puzzle.charAt(index));
+                            $(this).addClass('game-lost');
+                        }
+                    });
+                }
+                else {
+                    $('.game-over-lost').hide();
+                    $('.game-over-won').show();
+                }
+                $('.game-over').show();
+            }
+
+            function reiniciar(){
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>

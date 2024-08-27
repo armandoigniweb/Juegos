@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos.css">
+        <link rel="stylesheet" href="../animate.css">
+        <title>Sopa de Letras</title>
+        <style>
+            body {
+                background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20viewBox=%220%200%2016%2016%22%3E%3Cg%20fill=%22#84c6ad%22%3E%3Cpolygon%20points=%2212%200%200%2012%200%2016%2016%200%22/%3E%3Cpolygon%20points=%2212%2016%2016%2016%2016%2012%22/%3E%3Cpolygon%20points=%220%204%200%208%208%200%204%200%22/%3E%3Cpolygon%20points=%2216%208%2016%204%204%2016%208%2016%22/%3E%3C/g%3E%3C/svg%3E");
+                background-color:#ffed4d;
+                font-family: "Bitter", serif;
+                line-height: 1;
+            }
+
+            .body__Page span{
+                display: flex;
+                justify-content: center;
+                padding-bottom: 1rem;
+                font-weight: bold;
+                font-size: 1.2em;
+                font-family: 'Poppins';
+                color: #91862b;
+            }
+
+
+            .title {
+                color: #000;
+                text-align: center;
+            }
+
+            .puzzle{
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+            }
+
+            .puzzle-button{
+                display: flex;
+                justify-content: center;
+                margin-bottom: 3rem;
+            }
+
+            .puzzle-button input{
+                border: 2px solid transparent;
+                background-color: #3bc9db;
+                color: black;
+                border-radius: 2rem;
+                padding: 1rem;
+                font-size: 1em;
+                font-family: 'Poppins';
+                font-weight: bold;
+            }
+
+            .puzzle-button input:hover{
+                cursor: pointer;
+
+            }
+
+
+            #puzzle-container {
+                border: 1px solid whitesmoke;
+                border-radius: 15px;
+                padding: 20px;
+                float: left;
+                margin: 30px 20px;
+                background-color: rgb(255, 255, 255);
+            }
+
+            #puzzle-container div {
+                width: 100%;
+                margin: 0 auto;
+            }
+            /* estilo para cada cuadrado del rompecabezas */
+
+            #puzzle-container .puzzleSquare {
+                height: 30px;
+                width: 30px;
+                text-transform: uppercase;
+                background-color: white;
+                border: 0;
+                font: 1em sans-serif;
+            }
+
+            #puzzle-container button::-moz-focus-inner {
+                border: 0;
+            }
+            /* indica cuando se ha seleccionado un cuadrado */
+
+            #puzzle-container .selected {
+                background-color: rgb(245, 182, 65);
+            }
+            /* indica que el cuadrado es parte de una palabra que se ha encontrado */
+
+            #puzzle-container .found {
+                background-color: rgb(97, 97, 221);
+                color: white;
+            }
+
+            #puzzle-container .solved {
+                background-color: rgb(198, 39, 198);
+                color: white;
+            }
+            /* indica que se han encontrado todas las palabras */
+
+            #puzzle-container .complete {
+                background-color: #3bc9db;
+            }
+            /**
+            * Estilos para la lista de palabras
+            */
+
+            #puzzle-words {
+                padding-top: 20px;
+                -moz-column-count: 2;
+                -moz-column-gap: 20px;
+                -webkit-column-count: 2;
+                -webkit-column-gap: 20px;
+                column-count: 2;
+                column-gap: 20px;
+                width: 300px;
+            }
+
+            #puzzle-words ul {
+                list-style-type: none;
+            }
+
+            #puzzle-words li {
+                padding: 3px 0;
+                font: 1em sans-serif;
+            }
+            /*indica que la palabra ha sido encontrada */
+
+            #puzzle-words .wordFound {
+                text-decoration: line-through;
+                color: gray;
+            }
+            /**
+            *  Estilos para el botón
+            */
+
+            #solve {
+                margin: 0 30px;
+            }
+
+            .cover .container__cover p{
+                font-size: 42px;
+                color: #8BCB37;
+                margin: 0 25px;
+                font-family: Run Child;
+            }
+
+            .body__Page button:hover{
+                cursor: pointer;
+                animation: bounce; /* referring directly to the animation's @keyframe declaration */
+                animation-duration: 2s; /* don't forget to set a duration! */
+            }
+
+            .body__Page .reload{
+                background-color: #8BCB37;
+                font-family: Run Child;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+            }
+
+            .imgCustom {
+                width: 700px;
+                height: 350px;
+                object-fit: contain;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container_all" id="container__all">
+            <div class="cover">
+                <!--INICIO WAVE-->
+                    <div class="bg_color"></div>
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                <!--FINAL WAVE-->
+                <div class="container__cover">
+                    <p>Sopa de letras<br/><br/><a href="../rompecabezas/rompecabezas.html">&lt;&nbsp;&nbsp;</a><a href="../index.html"> Juegos </a></p>
+                    <div class="container__vector">
+                        <img class="imgCustom" src="../img/sopa-letras.png">
+                    </div>
+                </div>
+            </div>
+
+            <div class="body__Page">
+                <span><b>Aquí encontrarás palabras de todas las temáticas aprendidas</b></span>
+                <div class="puzzle">
+                    <!-- Add required markup -->
+                    <div id="puzzle-container"></div>
+                    <div id="puzzle-words"></div>
+                </div>
+                <div class="puzzle-button">
+                    <input type="button" id="solveBTN" value="RESOLVER SOPA DE LETRAS"/>
+                </div>
+                <button class="animate__animated animate__bounce reload" onclick="reiniciar()">Reiniciar</button>
+            </div>
+
+            <Footer>
+                <div class="container__footer">
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/uniquindio.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/huellas-ambientales-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/GEPAMOL.png" alt="">
+                        </div>
+                        <!-- <div class="terms">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum reiciendis et quasi aut facere vitae vero. Inventore, minus ab voluptate modi repellat, pariatur tempora quisquam, debitis facilis explicabo voluptatem. A.
+                        </div> -->
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/laboratorio2-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/minciencias.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box__copyright">
+                    <hr>
+                    <p>Todos los derechos reservados © 2022. Desarrollado por <span><b>IGNIWEB</b></span></p>
+                </div>
+            </Footer>
+        </div>
+
+        <!-- Add dependencies -->
+        <script src="../jquery-3-5-1.js"></script>
+        <script src="../wordfind.js"></script>
+        <script src="../wordfindgame.js"></script>
+        <!-- Add our logic -->
+        <script>
+            // An array with the words to show
+            // An array with the words to show
+            var words = ['agua','escorrentia','lluvia','montaña','heces','rio','microorganismos','parasito','bacteria','virus','hongo','microscopio','manos','vegetales','frutas','vomito','diarrea','fiebre','niños','ambiente','animales','carton','vidrio','latas'];
+
+            // Start a basic word game without customization !
+            var gamePuzzle = wordfindgame.create(words, '#puzzle-container', '#puzzle-words');
+
+            $("#solveBTN").click(function(){
+                // Solve the puzzle !
+                var result = wordfindgame.solve(gamePuzzle, words);
+                console.log(result);
+            });
+
+            function reiniciar(){
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos.css">
+        <link rel="stylesheet" href="../animate.css">
+        <title>Rompecabezas deslizante 1</title>
+        <style>
+            body {
+                background-color: #b197fc;
+                line-height: 1;
+            }
+
+            .body__Page span{
+                display: flex;
+                justify-content: center;
+                padding-bottom: 1rem;
+                font-weight: bold;
+                font-size: 1.2em;
+                font-family: 'Poppins';
+                color: #473c66;
+            }
+
+
+            .title {
+                color: #fff;
+                text-align: center;
+            }
+
+            .centered{
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+            }
+
+            #canvas {
+                width: 336px;
+                height: 335px;
+                background-color: transparent;
+                object-fit: contain;
+            }
+
+            #canvas #windiv {
+                display: none;
+            }
+
+            #canvas .banner {
+                width: 370px;
+                font-size: 50px;
+                background-color: #f5f5dc;
+                position: relative;
+                text-align: center;
+                top: -60px;
+                box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.55);
+                left: -15px;
+                z-index: 2;
+            }
+
+            #canvas .innerSquare {
+                width: 110px;
+                height: 110px;
+                float: left;
+                background-repeat: no-repeat;
+
+            }
+
+            #canvas .innerSquare.imageSquare {
+                font-size: 24px;
+                text-align: center;
+                border: 2px outset #5837bd;
+            }
+
+            #canvas .innerSquare.imageSquare:hover {
+                background-color: lightgray;
+            }
+
+            #canvas .innerSquare.clickable:hover {
+                opacity: 0.4;
+                filter: alpha(opacity=40);
+            }
+
+            #canvas .innerSquare.blank {
+                border: 1px inset #5837bd;
+            }
+
+            #previews {
+                width: 332px;
+                height: 120px;
+                background-color: lightgrey;
+                overflow: hidden;
+                padding-left: 15px;
+                padding-right: 15px;
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #previews .mini {
+                width: 90px;
+                height: 90px;
+                margin-top: 5px;
+                margin-right: 5px;
+            }
+
+            .game-over {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 60px 20px;
+                width: 100%;
+                max-width: 400px;
+                background: rgba(179, 229, 220, 0.95);
+                border-radius: 15px;
+                text-align: center;
+            }
+
+            .game-over p {
+                margin-top: 2rem;
+                font-size: 32px;
+                font-weight: bold;
+                font-family: "Bitter", serif;
+            }
+
+            .game-over button:hover {
+                background: #7ad2c2;
+            }
+
+
+            @media (max-width: 640px) {
+                .game-over {
+                    padding: 30px;
+                }
+                .game-over p {
+                    margin-top: 0;
+                }
+            }
+
+            .cover .container__cover p{
+                font-size: 42px;
+                color: #8BCB37;
+                margin: 0 25px;
+                font-family: Run Child;
+            }
+
+            .body__Page button:hover{
+                cursor: pointer;
+                animation: bounce; /* referring directly to the animation's @keyframe declaration */
+                animation-duration: 2s; /* don't forget to set a duration! */
+            }
+
+            .body__Page .reload{
+                background-color: #8BCB37;
+                font-family: Run Child;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container_all" id="container__all">
+            <div class="cover">
+                <!--INICIO WAVE-->
+                    <div class="bg_color"></div>
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                <!--FINAL WAVE-->
+                <div class="container__cover">
+                    <p>Rompecabezas deslizante 1<br/><br/><a href="../rompecabeza-arrastre/rompecabeza-arrastre.html">&lt;&nbsp;&nbsp;</a><a href="../index.html"> Juegos </a><a href="../rompecabeza-deslizante-2/rompecabeza-deslizante-2.html">&nbsp;&nbsp;></a></p>
+                    <div class="container__vector">
+                        <iframe class="iframe" src="../video/DESLIZANTE-1-LAVADO_MANOS.mp4" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body__Page">
+                <span><b>Desliza las fichas dando clic encima de cada una, reordena para ver el camino del laberinto</b></span>
+                <div class="centered">
+                    <main>
+                        <div id="canvas"></div>
+                        <div id="previews" style="text-align: center;"></div><br/>
+                        <div class="game-over" style="display: none;">
+                            <p class="game-over-won">¡Ganaste! :)</p>
+                        </div>
+                    </main>
+                </div>
+                <button class="animate__animated animate__bounce reload" onclick="reiniciar()">Reiniciar</button>
+            </div>
+
+            <Footer>
+                <div class="container__footer">
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/uniquindio.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/huellas-ambientales-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/GEPAMOL.png" alt="">
+                        </div>
+                        <!-- <div class="terms">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum reiciendis et quasi aut facere vitae vero. Inventore, minus ab voluptate modi repellat, pariatur tempora quisquam, debitis facilis explicabo voluptatem. A.
+                        </div> -->
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/laboratorio2-transparencia.png" alt="">
+                        </div>
+                    </div>
+
+                    <div class="box__footer">
+                        <div class="logo">
+                            <img src="../img/minciencias.png" alt="">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box__copyright">
+                    <hr>
+                    <p>Todos los derechos reservados © 2022. Desarrollado por <span><b>IGNIWEB</b></span></p>
+                </div>
+            </Footer>
+        </div>
+        <script src="../jquery-3-5-1.js"></script>
+        <script>
+            (function() {
+            var Blank, Puzzle, Tile,
+                __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+            Puzzle = (function() {
+                function Puzzle(images) {
+                var i, image, t, x, y, _i, _j, _len, _ref,
+                    _this = this;
+                this.images = images;
+                this.changeImage = __bind(this.changeImage, this);
+                this.switchTwo = __bind(this.switchTwo, this);
+                this.renderBoard = __bind(this.renderBoard, this);
+                this.blankPosition = __bind(this.blankPosition, this);
+                this.checkIfWon = __bind(this.checkIfWon, this);
+                this.mixup = __bind(this.mixup, this);
+                this.places = [];
+                this.initialPlaces = [];
+                _ref = this.images;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    image = _ref[_i];
+                    $('#previews').append('<img src="' + image + '" class="mini"/>');
+                }
+                this.image = this.images[0];
+                $('.mini').bind('click', function(event) {
+                    return _this.changeImage(event.target.src);
+                });
+                for (i = _j = 0; _j <= 7; i = ++_j) {
+                    x = Math.floor(i % 3) * 110;
+                    y = Math.floor(i / 3) * 110;
+                    t = new Tile(i, 110, 110, x, y, this.image);
+                    this.places.push(t);
+                }
+                this.places.push(new Blank(8));
+                this.initialPlaces = this.places.slice(0);
+                this.mixup();
+                }
+
+                Puzzle.prototype.mixup = function() {
+                var blankpos, i, randomNum, _i, _results;
+                blankpos = 8;
+                _results = [];
+                for (i = _i = 0; _i <= 10; i = ++_i) {
+                    randomNum = Math.floor(Math.random() * 9);
+                    this.switchTwo(randomNum, blankpos);
+                    _results.push(blankpos = randomNum);
+                }
+                return _results;
+                };
+
+                Puzzle.prototype.checkIfWon = function() {
+                var i, _i;
+                for (i = _i = 0; _i <= 8; i = ++_i) {
+                    if (this.places[i] === this.initialPlaces[i]) {
+                    continue;
+                    } else {
+                    return false;
+                    }
+                }
+                return true;
+                };
+
+                Puzzle.prototype.blankPosition = function() {
+                var place, pos, _i, _len, _ref;
+                _ref = this.places;
+                for (pos = _i = 0, _len = _ref.length; _i < _len; pos = ++_i) {
+                    place = _ref[pos];
+                    if (place["class"] === 'Blank') {
+                    return pos;
+                    }
+                }
+                };
+
+                Puzzle.prototype.renderBoard = function() {
+                var blank, t, _i, _len, _ref,
+                    _this = this;
+                blank = this.blankPosition();
+                $('#canvas').html('');
+                if (this.checkIfWon()) {
+                    $('#canvas').append('<div class="game-over"><img src="' + this.image + '"/><p class="game-over-won">¡Ganaste! :)</p></div>');
+                    return $('#windiv').show('slow');
+                    setTimeout(function(){
+                        window.location.reload()
+                        randomize()
+                    },1500)
+                } else {
+                    _ref = this.places;
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    t = _ref[_i];
+                    t.show(blank);
+                    }
+                    return $('.clickable').bind('click', function(event) {
+                    var toSwitch;
+                    toSwitch = parseInt(event.target.id);
+                    return _this.switchTwo(toSwitch, _this.blankPosition());
+                    });
+                }
+                };
+
+                Puzzle.prototype.switchTwo = function(pos1, pos2) {
+                var x, y;
+                x = this.places[pos1];
+                y = this.places[pos2];
+                this.places[pos2] = x;
+                this.places[pos1] = y;
+                this.places[pos2].position = pos2;
+                return this.renderBoard();
+                };
+
+                Puzzle.prototype.changeImage = function(image) {
+                var panel, _i, _len, _ref;
+                this.image = image;
+                _ref = this.places;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    panel = _ref[_i];
+                    if (panel["class"] !== 'Blank') {
+                    panel.image = image;
+                    }
+                }
+                return this.renderBoard();
+                };
+
+                return Puzzle;
+
+            })();
+
+            Tile = (function() {
+                function Tile(position, width, height, x, y, image) {
+                this.position = position;
+                this.width = width;
+                this.height = height;
+                this.x = x;
+                this.y = y;
+                this.image = image;
+                this["class"] = 'Tile';
+                }
+
+                Tile.prototype.show = function(blankPosition) {
+                if (this.isAdjacent(blankPosition)) {
+                    $('#canvas').append('<div id="' + this.position + '" class="innerSquare imageSquare clickable"></div>');
+                } else {
+                    $('#canvas').append('<div id="' + this.position + '" class="innerSquare imageSquare"></div>');
+                }
+                $("#" + this.position).css('background-position', '-' + this.x + 'px -' + this.y + 'px');
+                return $("#" + this.position).css('background-image', 'url(' + this.image + ')');
+                };
+
+                Tile.prototype.isAdjacent = function(blanksPosition) {
+                if (blanksPosition - 1 === this.position && (blanksPosition % 3) > 0 || blanksPosition + 1 === this.position && (blanksPosition % 3) < 2 || blanksPosition + 3 === this.position && (blanksPosition / 3) < 2 || blanksPosition - 3 === this.position && (blanksPosition / 3) > 0) {
+                    return true;
+                }
+                return false;
+                };
+
+                Tile.prototype.setImage = function(image) {
+                return this.image = image;
+                };
+
+                return Tile;
+
+            })();
+
+            Blank = (function() {
+                function Blank(position) {
+                this.position = position;
+                this["class"] = 'Blank';
+                }
+
+                Blank.prototype.show = function() {
+                return $('#canvas').append('<div class="innerSquare blank"></div>');
+                };
+
+                return Blank;
+
+            })();
+
+            $(document).ready(function() {
+                var imgs, puzzle;
+                /* CAMBIAR IMAGEN DEL SITIO*/
+                imgs = ['../img/DESLIZANTE-1.jpg',/*'http://placekitten.com/g/300/300', 'http://placekitten.com/g/301/301', 'http://placekitten.com/g/299/299'*/];
+                return puzzle = new Puzzle(imgs);
+            });
+
+            }).call(this);
+
+            function reiniciar(){
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>
